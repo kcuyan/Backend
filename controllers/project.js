@@ -68,7 +68,7 @@ var controller = {
         var projectId = req.params.id;
         var update = req.body;
 
-        Project.findOneAndUpdate(projectId, update, {new:true}, (err, projectUpdate) =>{
+        Project.findByIdAndUpdate(projectId, update, {new:true}, (err, projectUpdate) =>{
             if(err) return res.status(500).send({message: 'Error al actualizar'});
             if(!projectUpdate) return res.status(404).send({message: 'No existe el projecto para actualizar'});
 
@@ -80,7 +80,7 @@ var controller = {
 
     deleteProject: function(req, res){
         var projectId = req.params.id;
-        Project.findByIdAndRemove(projectId, (err, projectDelete)=>{
+        Project.findByIdAndDelete(projectId, (err, projectDelete)=>{
             if(err) return res.status(500).send({message: 'No se ha podido borrar el proyecto'});
             if(!projectDelete) return res.status(404).send({message: 'No se puede eliminar este Projecto'});
 
@@ -101,17 +101,17 @@ var controller = {
             var extSplit = fileName.split('\.');
             var fileExt = extSplit[1];
             
-            if(fileExt == 'png' || fileExt == 'jpg' || fileExt == 'gif'){
-                Project.findOneAndUpdate(projectId, {image: fileName}, {new: true},(err, projectUpdate) => {
+            if(fileExt == 'png' || fileExt == 'jpg' || fileExt == 'jpeg' || fileExt == 'gif'){
+                Project.findByIdAndUpdate(projectId, {image: fileName}, { new: true},(err, projectUpdated) => {
                     if(err) return res.status(500).send({message: 'la imagen no se ha subido'});
-                    if(!projectUpdate) return res.status(404).send({message: 'El proyecto no existe y no se ha guardado la imagen.'})
+                    if(!projectUpdated) return res.status(404).send({message: 'El proyecto no existe y no se ha guardado la imagen.'})
     
                     return res.status(200).send({
-                        project: projectUpdate
+                        project: projectUpdated
                     });
                 });
             }else{
-                    fs.unlink(filePath, (err) =>{
+                    fs.unlink(filePath, (err) =>{//libreria fs para eliminar un archivo
                         return res.status(200).send({message: 'la extensión no es valida'});
                     });
             }
