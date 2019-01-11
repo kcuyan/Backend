@@ -41,11 +41,11 @@ var controller = {
     getProjetc: function(req, res){
         var  projectId = req.params.id;
         
-        if (projectId == null) return res.status(404).send({message: 'El Projector no existe'});
+        if (projectId == null) return res.status(404).send({message: 'El Proyecto no existe'});
 
         Project.findById(projectId, (err, project) => {
             if(err) return res.status(500).send({message: 'error al devolver los datos.'});
-            if(!project) return res.status(404).send({message: 'El Projector no existe'});
+            if(!project) return res.status(404).send({message: 'El Proyecto no existe'});
             
             return res.status(200).send({
                 project
